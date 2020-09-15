@@ -4,12 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Superheros.Data;
 using Superheros.Models;
 
 namespace Superheros.Controllers
 {
     public class SuperHeroController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public SuperHeroController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         // GET: SuperHeroController1
         public ActionResult Index()
         {
@@ -33,6 +40,8 @@ namespace Superheros.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(SuperHeroModel superHero)
         {
+            _context.Add(superHero);
+            _context.SaveChanges();
             return View();
         }
 
