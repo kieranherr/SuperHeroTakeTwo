@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,8 @@ namespace Superheros.Controllers
         // GET: SuperHeroController1
         public ActionResult Index()
         {
-            return View();
+            var superHeroes = _context.Superheroes;
+            return View(superHeroes);
         }
 
         // GET: SuperHeroController1/Details/5
@@ -32,7 +34,8 @@ namespace Superheros.Controllers
         // GET: SuperHeroController1/Create
         public ActionResult Create()
         {
-            return View();
+            SuperHeroModel superHero = new SuperHeroModel();
+            return View(superHero);
         }
 
         // POST: SuperHeroController1/Create
@@ -42,12 +45,13 @@ namespace Superheros.Controllers
         {
             _context.Add(superHero);
             _context.SaveChanges();
-            return View();
+            return RedirectToAction("Index");
         }
 
         // GET: SuperHeroController1/Edit/5
         public ActionResult Edit(int id)
         {
+
             return View();
         }
 
@@ -69,16 +73,21 @@ namespace Superheros.Controllers
         // GET: SuperHeroController1/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            SuperHeroModel super = new SuperHeroModel();
+            super.Id = id;
+            return View(super);
+
         }
 
         // POST: SuperHeroController1/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(SuperHeroModel super)
         {
             try
             {
+                _context.Remove(super);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
