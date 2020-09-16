@@ -28,7 +28,10 @@ namespace Superheros.Controllers
         // GET: SuperHeroController1/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            SuperHeroModel super = _context.Superheroes.Where(d => d.Id == id).FirstOrDefault();
+
+
+            return View(super);
         }
 
         // GET: SuperHeroController1/Create
@@ -51,17 +54,20 @@ namespace Superheros.Controllers
         // GET: SuperHeroController1/Edit/5
         public ActionResult Edit(int id)
         {
+            SuperHeroModel super = _context.Superheroes.Where(d => d.Id == id).FirstOrDefault();
 
-            return View();
+            return View(super);
         }
 
         // POST: SuperHeroController1/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(SuperHeroModel super)
         {
             try
             {
+                _context.Update(super);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
